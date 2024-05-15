@@ -1,0 +1,4 @@
+pydantic
+pydantic-settings
+azure-storage-queue
+azure-identity
