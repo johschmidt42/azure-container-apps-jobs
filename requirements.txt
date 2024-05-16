@@ -1,4 +1,5 @@
+azure-identity
+azure-mgmt-appcontainers
+azure-storage-queue
 pydantic
 pydantic-settings
-azure-storage-queue
-azure-identity

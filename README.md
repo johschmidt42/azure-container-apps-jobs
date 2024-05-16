@@ -24,6 +24,7 @@ https://learn.microsoft.com/en-us/azure/container-apps/managed-identity-image-pu
 
 #### TODO
 - [X] Use UAMI to process messages -> Add AZURE_CLIENT_ID as environment variable
+- [X] Execute job using REST API/Python SDK
 - [ ] Use UAMI to pull images
 - [ ] Retry mechanisms
       -> dequeue_count
