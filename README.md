@@ -4,11 +4,13 @@ This repository explores the Azure Container Apps Jobs capabilities (2024-05) th
 
 - https://learn.microsoft.com/en-us/azure/container-apps/jobs?tabs=azure-portal
 
-Scenario: Queue based point-to-point communication
+Scenario(s):
 
-## Overview
+- [Queue based point-to-point communication with Azure Storage Queue/Azure Service Bus](https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs?source=recommendations)
 
-TODO: Overview Docker image
+## Objectives and Content Overview
+
+TODO: Overview Image
 
 - Dockerfile to create a service that processes messages ([Dockerfile](Dockerfile))
     - Multistage Dockerfile for production and development
@@ -20,12 +22,12 @@ TODO: Overview Docker image
     - messages are written to a poison queue
     - messages check the dequeue count
     - messages that are received are not visible for a period of time, therefore can't be processed by other services
-- Execute a job & get the job execution status using REST API/Python SDK
-    - `pip install azure-mgmt-appcontainers`
-    - [start_job.py](start_job.py)
-- Show that a User Assigned Managed Identity is used to
+- Example code to write messages to a service bus topic ([service_bus_write.py](service_bus_write.py))
+- Example code to process messages in a service bus topic ([service_bus_process.py](service_bus_process.py))
+- Execute a job & get the job execution status using REST API/Python SDK ([start_job.py](start_job.py))
+- Show that a User Assigned Managed Identity (instead of access keys) is used to
     - pull the image from the container registry
-    - process messages in a storage queue or service bus
+    - process messages in a storage queue or service bus topic
 
 ## Provisioning Steps
 
@@ -40,13 +42,14 @@ TODO: Overview Docker image
 - Create Container Apps Jobs
     - Assign UAMI
     - Add secret ACR (TODO: replace with RBAC)
+- Create a job
 
 ### Permissions:
 
 - Assign UAMI ACR Pull permission
 - Assign UAMI Storage Queue Data Contributor (TODO: Storage Queue Data Message Processor should be enough?)
 
-#### Notes & TODOs
+## Notes, Insights & TODOs
 
 - When using an UAMI, don't forget to add AZURE_CLIENT_ID as environment variable in the container
 - A [KEDA](https://keda.sh/) scaler evaluates scaling rules on a polling interval. A scaling rule for example would be
