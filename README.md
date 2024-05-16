@@ -4,9 +4,11 @@ This repository explores the Azure Container Apps Jobs capabilities (2024-05) th
 
 - https://learn.microsoft.com/en-us/azure/container-apps/jobs?tabs=azure-portal
 
+Scenario: Queue based point-to-point communication
+
 ## Overview
 
-TODO: Overview Docker image (Queue Based Point-to-point communication)
+TODO: Overview Docker image
 
 - Dockerfile to create a service that processes messages ([Dockerfile](Dockerfile))
     - Multistage Dockerfile for production and development
