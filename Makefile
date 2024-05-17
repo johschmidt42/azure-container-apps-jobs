@@ -18,7 +18,7 @@ help:  ## display this help
 build-release:  ## build docker image (release)
 	@docker build --file Dockerfile --target release --platform linux/amd64 --tag $(image_name):$(image_tag) .
 
-build-release:  ## build docker image (dev)
+build-dev:  ## build docker image (dev)
 	@docker build --file Dockerfile --target dev --platform linux/amd64 --tag $(image_name):$(image_tag) .
 
 run:  ## run docker image (dev) with mounted azure credentials
