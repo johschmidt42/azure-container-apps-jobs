@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 
 container_registry = johannes
-image_name = johannes.azurecr.io/johannes-container-apps
+image_name = johannes.azurecr.io/johannes-container-apps-jobs
 image_tag = latest
 
 
