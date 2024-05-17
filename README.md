@@ -1,8 +1,6 @@
 # Azure Container Apps Jobs
 
-This repository explores the Azure Container Apps Jobs capabilities (2024-05) that are summarized here:
-
-- https://learn.microsoft.com/en-us/azure/container-apps/jobs?tabs=azure-portal
+This repository explores the Azure Container Apps Jobs capabilities:
 
 Scenario(s):
 
@@ -65,3 +63,8 @@ TODO: Overview Image
 - [ ] Use UAMI to pull
   images (https://learn.microsoft.com/en-us/azure/container-apps/managed-identity-image-pull?tabs=azure-cli&pivots=azure-portal)
 - [ ] Try service bus
+
+## Resources
+
+- https://learn.microsoft.com/en-us/azure/container-apps/jobs?tabs=azure-portal
+- https://www.nickthecloudguy.com/azure-event-driven-blobs-event-grid/
