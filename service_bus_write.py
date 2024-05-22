@@ -2,8 +2,7 @@ import logging
 import sys
 
 from azure.identity import DefaultAzureCredential
-from azure.servicebus import (ServiceBusClient, ServiceBusMessage,
-                              ServiceBusSender)
+from azure.servicebus import ServiceBusClient, ServiceBusMessage
 
 from models import ServiceBusQueueSettings
 from utils import generate_order_msg
@@ -33,7 +32,7 @@ def write_to_service_bus_queue(content: str) -> None:
     ) as servicebus_client:
         with servicebus_client.get_queue_sender(
             queue_name=settings.queue_name
-        ) as sender:  # type: ServiceBusSender
+        ) as sender:
             sender.send_messages(message=msg, timeout=60)
 
     logger.info(content)

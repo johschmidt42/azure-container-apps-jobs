@@ -138,30 +138,6 @@ class StorageQueueProcess:
             logger.critical("Failed to delete message!")
             raise ex
 
-    def process_message(self, order_event: OrderEvent) -> None:
-        """
-        Processes a given order event message.
-
-        Args:
-            order_event: An instance of the OrderEvent class representing the order event message to be processed.
-
-        Raises:
-            Exception: If an error occurs during the processing of the message.
-
-        Returns:
-            None: No value is returned.
-        """
-        try:
-            ...
-
-        except Exception as ex:
-            logger.exception(ex)
-            logger.error("Failed to process message!")
-            raise ex
-
-    def process_message_fail(self, order_event: OrderEvent) -> None:
-        raise ValueError("Can't process message!")
-
 
 if __name__ == "__main__":
     process: StorageQueueProcess = StorageQueueProcess()
