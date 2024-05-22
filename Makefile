@@ -27,3 +27,9 @@ run:  ## run docker image (dev) with mounted azure credentials
 push:  ## push docker image to container registry
 	@az acr login --name $(container_registry)
 	@docker push $(image_name):$(image_tag)
+
+write-message-storage-queue:  ## writes a message to the storage queue
+	@python storage_queue_write.py
+
+write-message-servicebus-queue:  ## writes a message to the service bus queue
+	@python service_bus_write.py
