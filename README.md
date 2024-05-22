@@ -4,7 +4,10 @@ This repository explores the Azure Container Apps Jobs capabilities:
 
 Scenario(s):
 
-- [Queue based point-to-point communication with Azure Storage Queue/Azure Service Bus](https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs?source=recommendations)
+- [Queue based point-to-point communication](https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs?source=recommendations)
+  with
+    - Azure Storage Queue
+    - Azure Service Bus Queue
 
 ## Objectives and Content Overview
 
@@ -34,8 +37,10 @@ TODO: Overview Image
 - Create User Assigned Managed Identity (UAMI)
 - Create Container Registry
 - Create Storage Account
-    - Create Storage Queue
-    - Create Storage Queue (Poison)
+    - Create Queue
+    - Create Queue (Poison)
+- Create Service Bus Namespace
+    - Create Queue
 - Create Container Apps Environment
 - Create Container Apps Jobs
     - Assign UAMI
@@ -48,7 +53,8 @@ TODO: Overview Image
 - Assign UAMI Storage Queue Data Contributor (TODO: Storage Queue Data Message Processor should be
   enough? [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access))
 - Assign UAMI Service Bus Data Owner (
-  TODO: [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access), see [Rights required for Service Bus operations](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-sas#rights-required-for-service-bus-operations))
+  TODO: [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access),
+  see [Rights required for Service Bus operations](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-sas#rights-required-for-service-bus-operations))
 
 ## Notes, Insights & TODOs
 
@@ -59,15 +65,18 @@ TODO: Overview Image
   It is important to note that if you provision a functionally broken image that doesn't receive any messages (even
   though they exist), the scaling rule will execute a job for this message in every polling interval, creating an
   endless loop.
-  Therefore, you should make sure that receiving messages is always possible and add a poison queue, work with dequeue
-  count and set the visibility parameter in the azure storage queue, so that longer running jobs not process the same
-  message.
+  Therefore, you should make sure that receiving messages is always possible. Additionally, you should make sure to use
+  dead-lettering. Azure storage queue requires us to write the logic (application-level dead-lettering), e.g. add a
+  poison queue, work with dequeue
+  count and set the visibility parameter in the azure storage queue etc., while Azure service bus has system-provided
+  dead-lettering.
 - [Queues vs Topics](https://medium.com/@emer.kurbegovic/queues-vs-topics-a-simple-guide-with-real-world-examples-1d32947cb574):
     - **Queue**: single receiver ([FIFO](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
       ![queue.png](docs/queue.png)
     - **Topic**: many receivers (No [FIFO](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
       ![topic.png](docs/topic.png)
-- ServiceBus Queue has system-provided dead-lettering & uses the [AMQP Protocol](https://d0znpp.medium.com/what-is-amqp-protocol-all-you-need-to-know-c9eedb680c71)
+- ServiceBus Queue has system-provided dead-lettering & uses
+  the [AMQP Protocol](https://d0znpp.medium.com/what-is-amqp-protocol-all-you-need-to-know-c9eedb680c71)
 - Storage Queue has application-level dead-lettering
 
 - [ ] Use UAMI to pull
