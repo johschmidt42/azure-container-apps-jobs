@@ -15,7 +15,7 @@ logger.level = logging.INFO
 class Process:
     def __init__(self):
         self.settings: StorageQueueSettings = StorageQueueSettings()
-        self.credential = DefaultAzureCredential()
+        self.credential: DefaultAzureCredential = DefaultAzureCredential()
 
         self.visibility_timeout: int = 5  # 5 min
         self.max_retries: int = 3
@@ -57,7 +57,8 @@ class Process:
                 self.delete_message(msg=msg)
                 return None
 
-            self.process_message_fail(order_event=order_event)
+            # self.process_message_fail(order_event=order_event)
+            self.process_message(order_event=order_event)
             self.delete_message(msg)
 
             return None
@@ -67,6 +68,16 @@ class Process:
             raise ex
 
     def add_to_poison_queue(self, msg: QueueMessage) -> None:
+        """
+        Adds a message to the poison queue.
+
+        Args:
+            self: The instance of the class.
+            msg (QueueMessage): The message to be added to the poison queue.
+
+        Returns:
+            None
+        """
         poison_queue_client: QueueClient = QueueClient(
             account_url=self.settings.storage_queue_url,
             queue_name=self.settings.poison_queue_name,
@@ -77,6 +88,18 @@ class Process:
         return None
 
     def receive_message(self) -> None | QueueMessage:
+        """
+
+        Receive a message from the queue.
+
+        Returns:
+            None: If no message is received from the queue.
+            QueueMessage: The received message from the queue.
+
+        Raises:
+            Exception: If there is an error receiving the message.
+
+        """
         try:
             msg: None | QueueMessage = self.queue_client.receive_message(
                 visibility_timeout=self.visibility_timeout
@@ -89,6 +112,19 @@ class Process:
             raise ex
 
     def delete_message(self, msg: QueueMessage) -> None:
+        """
+        Delete a message from the queue.
+
+        Args:
+            self (object): The instance of the class that this method belongs to.
+            msg (QueueMessage): The message to be deleted from the queue.
+
+        Returns:
+            None: This method does not return anything.
+
+        Raises:
+            Exception: If there is an error encountered while trying to delete the message from the queue.
+        """
         try:
             self.queue_client.delete_message(msg)
             return None
@@ -99,6 +135,18 @@ class Process:
             raise ex
 
     def process_message(self, order_event: OrderEvent) -> None:
+        """
+        Processes a given order event message.
+
+        Args:
+            order_event: An instance of the OrderEvent class representing the order event message to be processed.
+
+        Raises:
+            Exception: If an error occurs during the processing of the message.
+
+        Returns:
+            None: No value is returned.
+        """
         try:
             ...
 
