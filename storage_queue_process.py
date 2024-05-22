@@ -12,7 +12,7 @@ logger.addHandler(logging.StreamHandler(stream=sys.stdout))
 logger.level = logging.INFO
 
 
-class Process:
+class StorageQueueProcess:
     def __init__(self):
         self.settings: StorageQueueSettings = StorageQueueSettings()
         self.credential: DefaultAzureCredential = DefaultAzureCredential()
@@ -28,6 +28,8 @@ class Process:
     def run(self) -> None:
         """
         Process storage queue messages.
+
+        Uses application-level dead-lettering.
 
         Returns: None
 
@@ -70,6 +72,8 @@ class Process:
     def add_to_poison_queue(self, msg: QueueMessage) -> None:
         """
         Adds a message to the poison queue.
+
+        This is application-level dead-lettering.
 
         Args:
             self: The instance of the class.
@@ -160,5 +164,5 @@ class Process:
 
 
 if __name__ == "__main__":
-    process: Process = Process()
+    process: StorageQueueProcess = StorageQueueProcess()
     process.run()

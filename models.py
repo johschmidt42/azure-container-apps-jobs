@@ -2,6 +2,16 @@ from pydantic import BaseModel, computed_field
 from pydantic_settings import BaseSettings
 
 
+class ServiceBusQueueSettings(BaseSettings):
+    service_bus_namespace: str = "service-bus-johannes"
+    queue_name: str = "mysecondqueue"
+
+    @computed_field
+    @property
+    def service_bus_url(self) -> str:
+        return f"{self.service_bus_namespace}.servicebus.windows.net"
+
+
 class StorageQueueSettings(BaseSettings):
     storage_account: str = "johannesstorageacc"
     queue_name: str = "mysecondqueue"

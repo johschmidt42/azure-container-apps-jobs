@@ -1,5 +1,6 @@
 azure-identity
 azure-mgmt-appcontainers
+azure-servicebus
 azure-storage-queue
 pydantic
 pydantic-settings

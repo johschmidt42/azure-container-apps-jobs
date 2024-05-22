@@ -13,15 +13,15 @@ TODO: Overview Image
 - Dockerfile to create a service that processes messages ([Dockerfile](Dockerfile))
     - Multistage Dockerfile for production and development
     - Can be executed locally by mounting the azure credentials (see [Makefile](Makefile))
-- Example code to write messages to a storage queue ([storage_queue_process.py](storage_queue_process.py))
-- Example code to process messages in a storage queue ([storage_queue_write.py](storage_queue_write.py))
+- Example code to write messages to a **storage queue** ([storage_queue_process.py](storage_queue_process.py))
+- Example code to process messages in a **storage queue** ([storage_queue_write.py](storage_queue_write.py))
     - messages are in JSON format
     - messages can be transformed into pydantic models
     - messages are written to a poison queue
     - messages check the dequeue count
     - messages that are received are not visible for a period of time, therefore can't be processed by other services
-- Example code to write messages to a service bus topic ([service_bus_write.py](service_bus_write.py))
-- Example code to process messages in a service bus topic ([service_bus_process.py](service_bus_process.py))
+- Example code to write messages to a **service bus queue** ([service_bus_write.py](service_bus_write.py))
+- Example code to process messages in a **service bus queue** ([service_bus_process.py](service_bus_process.py))
 - Execute a job & get the job execution status using REST API/Python SDK ([start_job.py](start_job.py))
 - Show that a User Assigned Managed Identity (instead of access keys) is used to
     - pull the image from the container registry
@@ -45,7 +45,10 @@ TODO: Overview Image
 ### Permissions:
 
 - Assign UAMI ACR Pull permission
-- Assign UAMI Storage Queue Data Contributor (TODO: Storage Queue Data Message Processor should be enough?)
+- Assign UAMI Storage Queue Data Contributor (TODO: Storage Queue Data Message Processor should be
+  enough? [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access))
+- Assign UAMI Service Bus Data Owner (
+  TODO: [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access), see [Rights required for Service Bus operations](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-sas#rights-required-for-service-bus-operations))
 
 ## Notes, Insights & TODOs
 
@@ -59,12 +62,23 @@ TODO: Overview Image
   Therefore, you should make sure that receiving messages is always possible and add a poison queue, work with dequeue
   count and set the visibility parameter in the azure storage queue, so that longer running jobs not process the same
   message.
+- [Queues vs Topics](https://medium.com/@emer.kurbegovic/queues-vs-topics-a-simple-guide-with-real-world-examples-1d32947cb574):
+    - **Queue**: single receiver ([FIFO](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
+      ![queue.png](docs/queue.png)
+    - **Topic**: many receivers (No [FIFO](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)))
+      ![topic.png](docs/topic.png)
+- ServiceBus Queue has system-provided dead-lettering & uses the [AMQP Protocol](https://d0znpp.medium.com/what-is-amqp-protocol-all-you-need-to-know-c9eedb680c71)
+- Storage Queue has application-level dead-lettering
 
 - [ ] Use UAMI to pull
   images (https://learn.microsoft.com/en-us/azure/container-apps/managed-identity-image-pull?tabs=azure-cli&pivots=azure-portal)
 - [ ] Try service bus
+- [ ] Add KEDA rules here
+- [ ] Unit tests?
+- [ ] src directory
 
 ## Resources
 
 - https://learn.microsoft.com/en-us/azure/container-apps/jobs?tabs=azure-portal
+- https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/servicebus/azure-servicebus/samples
 - https://www.nickthecloudguy.com/azure-event-driven-blobs-event-grid/
