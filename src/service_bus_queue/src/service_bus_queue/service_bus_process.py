@@ -5,9 +5,8 @@ from typing import List
 
 from azure.identity import DefaultAzureCredential
 from azure.servicebus import ServiceBusClient, ServiceBusReceivedMessage
-
-from models import OrderEvent, ServiceBusQueueSettings
-from utils import process_message
+from shared.models import OrderEvent, ServiceBusQueueSettings
+from shared.utils import process_message
 
 logger: logging.Logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(stream=sys.stdout))

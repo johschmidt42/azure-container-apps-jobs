@@ -28,7 +28,7 @@ TODO: Overview Image
 - Execute a job & get the job execution status using REST API/Python SDK ([start_job.py](start_job.py))
 - Show that a User Assigned Managed Identity (instead of access keys) is used to
     - pull the image from the container registry
-    - process messages in a storage queue or service bus topic
+    - process messages in a storage queue or service bus queue
 
 ## Provisioning Steps
 
@@ -36,6 +36,7 @@ TODO: Overview Image
 
 - Create User Assigned Managed Identity (UAMI)
 - Create Container Registry
+  - Add AcrPull permission (RBAC) to UAMI
 - Create Storage Account
     - Create Queue
     - Create Queue (Poison)
@@ -44,12 +45,11 @@ TODO: Overview Image
 - Create Container Apps Environment
 - Create Container Apps Jobs
     - Assign UAMI
-    - Add secret ACR (TODO: replace with RBAC)
 - Create a job
 
 ### Permissions:
 
-- Assign UAMI ACR Pull permission
+- Assign UAMI AcrPull permission
 - Assign UAMI Storage Queue Data Contributor (TODO: Storage Queue Data Message Processor should be
   enough? [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access))
 - Assign UAMI Service Bus Data Owner (
@@ -79,8 +79,6 @@ TODO: Overview Image
   the [AMQP Protocol](https://d0znpp.medium.com/what-is-amqp-protocol-all-you-need-to-know-c9eedb680c71)
 - Storage Queue has application-level dead-lettering
 
-- [ ] Use UAMI to pull
-  images (https://learn.microsoft.com/en-us/azure/container-apps/managed-identity-image-pull?tabs=azure-cli&pivots=azure-portal)
 - [ ] Try service bus
 - [ ] Add KEDA rules here
 - [ ] Unit tests?

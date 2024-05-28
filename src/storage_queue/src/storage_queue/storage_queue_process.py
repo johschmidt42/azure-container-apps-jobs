@@ -4,8 +4,8 @@ import sys
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.queue import QueueClient, QueueMessage
-
-from models import OrderEvent, StorageQueueSettings
+from shared.models import OrderEvent, StorageQueueSettings
+from shared.utils import process_message
 
 logger: logging.Logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(stream=sys.stdout))
@@ -60,7 +60,7 @@ class StorageQueueProcess:
                 return None
 
             # self.process_message_fail(order_event=order_event)
-            self.process_message(order_event=order_event)
+            process_message(order_event=order_event)
             self.delete_message(msg)
 
             return None

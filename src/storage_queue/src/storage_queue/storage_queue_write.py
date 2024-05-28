@@ -3,9 +3,8 @@ import sys
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.queue import QueueClient, QueueMessage
-
-from models import StorageQueueSettings
-from utils import generate_order_msg
+from shared.models import StorageQueueSettings
+from shared.utils import generate_order_msg
 
 logger: logging.Logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(stream=sys.stdout))

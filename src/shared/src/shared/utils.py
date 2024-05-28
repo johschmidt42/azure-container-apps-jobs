@@ -1,12 +1,9 @@
 import logging
-import sys
 import uuid
 
-from models import OrderEvent
+from shared.models import OrderEvent
 
 logger: logging.Logger = logging.getLogger(__name__)
-logger.addHandler(logging.StreamHandler(stream=sys.stdout))
-logger.level = logging.INFO
 
 
 def generate_order_msg() -> str:
