@@ -30,10 +30,31 @@ TODO: Overview Image
     - pull the image from the container registry
     - process messages in a storage queue or service bus queue
 
+## Directory Structure
+
+The structure is as follows:
+
+```shell
+.
+├── docs
+└── src
+    ├── service_bus_queue
+    │          └── src
+    │               └── service_bus_queue
+    ├── shared
+    │        └── src
+    │            └── shared
+    └── storage_queue
+        └── src
+            └── storage_queue
+```
+
 ## Provisioning Steps
 
 ### Resources
 
+- Create Resource Group
+- Create Container Apps environment
 - Create User Assigned Managed Identity (UAMI)
 - Create Container Registry
   - Add AcrPull permission (RBAC) to UAMI
@@ -43,9 +64,9 @@ TODO: Overview Image
 - Create Service Bus Namespace
     - Create Queue
 - Create Container Apps Environment
-- Create Container Apps Jobs
+- Create Container Apps Job
     - Assign UAMI
-- Create a job
+
 
 ### Permissions:
 
@@ -78,14 +99,23 @@ TODO: Overview Image
 - ServiceBus Queue has system-provided dead-lettering & uses
   the [AMQP Protocol](https://d0znpp.medium.com/what-is-amqp-protocol-all-you-need-to-know-c9eedb680c71)
 - Storage Queue has application-level dead-lettering
+- The [KEDA scaler](https://keda.sh/docs/2.14/scalers/azure-service-bus/) for the Storage Queue requires the connection string of the Azure Storage Account  
+- The [KEDA scaler](https://keda.sh/docs/2.14/scalers/azure-storage-queue/) for the Service Bus Queue requires the connection string of the Azure Service Bus namespace
 
 - [ ] Try service bus
-- [ ] Add KEDA rules here
+- [ ] Add KEDA rules here (comes with deploying the container job)
 - [ ] Unit tests?
-- [ ] src directory
+- [ ] PostgreSQL
 
 ## Resources
 
-- https://learn.microsoft.com/en-us/azure/container-apps/jobs?tabs=azure-portal
+- https://learn.microsoft.com/en-us/azure/container-apps/jobs
+- https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs
 - https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/servicebus/azure-servicebus/samples
 - https://www.nickthecloudguy.com/azure-event-driven-blobs-event-grid/
+
+### Scalers
+
+- https://keda.sh/docs/2.14/scalers/azure-storage-queue/
+- https://keda.sh/docs/2.14/scalers/azure-service-bus/
+- https://keda.sh/docs/2.14/scalers/postgresql/
