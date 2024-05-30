@@ -6,6 +6,7 @@ container_registry = johannes
 image_name = johannes.azurecr.io/johannes-container-apps-jobs
 image_tag = storage-queue
 subscription = a6feefeb-7f6b-425b-8311-b42ebeaee0d1
+subscription_name = B-ID_Sandbox
 resource_group = johannes-sandbox
 environment = johannes-container-apps-environment
 storage_account_name = johannesstorageacc
@@ -51,8 +52,8 @@ set-subscription:
 	@az account set --subscription $(subscription)
 
 deploy-container-job:
-	@QUEUE_CONNECTION_STRING=`az storage account show-connection-string -g $(resource_group) --name $(storage_account_name) --query connectionString --output tsv`
-	@az containerapp job create \
+	@QUEUE_CONNECTION_STRING=$$(az storage account show-connection-string -g $(resource_group) --name $(storage_account_name) --query connectionString --output tsv) && \
+	az containerapp job create \
     --name "$(image_tag)" \
     --subscription "$(subscription)" \
     --resource-group "$(resource_group)" \
@@ -69,7 +70,7 @@ deploy-container-job:
     --image "$(image_name):$(image_tag)" \
     --cpu "0.5" \
     --memory "1Gi" \
-    --secrets "connection-string-secret=$QUEUE_CONNECTION_STRING" \
+    --secrets "connection-string-secret=$$QUEUE_CONNECTION_STRING" \
     --env-vars "AZURE_STORAGE_QUEUE_NAME=$(queue_name)" "AZURE_STORAGE_CONNECTION_STRING=secretref:connection-string-secret" "AZURE_CLIENT_ID=$(uami_client_id)" \
     --mi-user-assigned "$(uami)" \
     --registry-identity "$(uami)" \
