@@ -1,36 +1,39 @@
 # Azure Container Apps Jobs
 
-This repository explores the Azure Container Apps Jobs capabilities:
+This repository explores the **Azure Container Apps Jobs**
+for [Queue based point-to-point communication](https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs?source=recommendations)
+with
 
-Scenario(s):
+- Azure Storage Queue
+- Azure Service Bus Queue
 
-- [Queue based point-to-point communication](https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs?source=recommendations)
-  with
-    - Azure Storage Queue
-    - Azure Service Bus Queue
+![queue.png](docs/queue.png)
 
-## Objectives and Content Overview
+## Objectives
 
 TODO: Overview Image
 
-- Dockerfile to create a service that processes messages ([Dockerfile](Dockerfile))
-    - Multistage Dockerfile for production and development
-    - Can be executed locally by mounting the azure credentials (see [Makefile](Makefile))
-- Example code to write messages to a **storage queue** ([storage_queue_process.py](storage_queue_process.py))
-- Example code to process messages in a **storage queue** ([storage_queue_write.py](storage_queue_write.py))
-    - messages are in JSON format
-    - messages can be transformed into pydantic models
-    - messages are written to a poison queue
-    - messages check the dequeue count
-    - messages that are received are not visible for a period of time, therefore can't be processed by other services
-- Example code to write messages to a **service bus queue** ([service_bus_write.py](service_bus_write.py))
-- Example code to process messages in a **service bus queue** ([service_bus_process.py](service_bus_process.py))
-- Execute a job & get the job execution status using REST API/Python SDK ([start_job.py](start_job.py))
-- Show that a User Assigned Managed Identity (instead of access keys) is used to
-    - pull the image from the container registry
-    - process messages in a storage queue or service bus queue
+TODO: Define objective
 
-## Directory Structure
+- managed identity where possible
+- serverless
+- system & console logs
+
+For example, a User Assigned Managed Identity (instead of access keys) is used to
+
+- pull the image from the container registry
+- process messages in a storage queue or service bus queue
+
+## Content Overview
+
+Source code for the docker images can be found in the [src directory](src).
+Infrastructure is provisioned via Azure CLI commands in the [Makefile](Makefile).
+
+- Execute a job & get the job execution status using REST API/Python
+  SDK ([container_app_start_job.py](container_app_start_job.py))
+- Create a Workbook to view system & console logs.
+
+### Directory Structure
 
 The structure is as follows:
 
@@ -49,28 +52,77 @@ The structure is as follows:
             └── storage_queue
 ```
 
+### Storage Queue
+
+- [Makefile](src%2Fstorage_queue%2FMakefile) to
+    - build, run & push the docker container to an Azure Container Registry
+    - write & process messages to/in storage queue
+    - deploy container app job
+    - delete container app job
+- [Dockerfile](src%2Fstorage_queue%2FDockerfile) to process messages
+    - Multistage Dockerfile for production and local development
+    - Can be executed locally by mounting the azure credentials
+- Example code to write messages to a **storage queue
+  ** ([storage_queue_process.py](src%2Fstorage_queue%2Fsrc%2Fstorage_queue%2Fstorage_queue_process.py))
+- Example code to process messages in a **storage queue
+  ** ([storage_queue_write.py](src%2Fstorage_queue%2Fsrc%2Fstorage_queue%2Fstorage_queue_write.py))
+    - messages are in JSON format
+    - messages can be transformed into Pydantic models
+    - messages are written to a poison queue if they can't be processed (checking the dequeue count)
+    - messages that are received are not visible for a period of time, therefore can't be processed by other services
+
+### Service Bus Queue
+
+- [Makefile](src%2Fstorage_queue%2FMakefile) to
+    - build, run & push the docker container to an Azure Container Registry
+    - write & process messages to/in service bus queue
+    - deploy container app job
+    - delete container app job
+- [Dockerfile](src%2Fservice_bus_queue%2FDockerfile) to process messages
+    - Multistage Dockerfile for production and local development
+    - Can be executed locally by mounting the azure credentials
+- Example code to write messages to a **service bus queue
+  ** ([service_bus_write.py](src%2Fservice_bus_queue%2Fsrc%2Fservice_bus_queue%2Fservice_bus_write.py))
+- Example code to process messages in a **service bus queue
+  ** ([service_bus_process.py](src%2Fservice_bus_queue%2Fsrc%2Fservice_bus_queue%2Fservice_bus_process.py))
+
 ## Provisioning Steps
+
+Azure CLI commands are used to provision the resources on Azure.
+You can find the commands in the [Makefile](Makefile).
+Make sure to provide the variables in the "Variables" section at the top of the file.
 
 ### Resources
 
-- Create Resource Group
-- Create Container Apps environment
-- Create User Assigned Managed Identity (UAMI)
-- Create Container Registry
-  - Add AcrPull permission (RBAC) to UAMI
-- Create Storage Account
-    - Create Queue
-    - Create Queue (Poison)
-- Create Service Bus Namespace
-    - Create Queue
-- Create Container Apps Environment
-- Create Container Apps Job
-    - Assign UAMI
+Here is a breakdown of resources that are provisioned & permissions that are granted.
 
+- Resource Group
+- Log Analytics Workspace
+- User Assigned Managed Identity (UAMI)
+- Container Registry
+    - AcrPull permission (RBAC)
+- Container Apps Environment
+    - Diagnostics settings (console logs)
+    - Diagnostics settings (system logs)
+- Storage Account
+    - Queue
+    - Queue (Poison)
+    - Storage Queue Data Contributor permission (RBAC)
+- Service Bus Namespace
+    - Queue
+    - Service Bus Data Owner permission (RBAC)
+- Workbook
 
-### Permissions:
+After the resources have been created you can:
 
-- Assign UAMI AcrPull permission
+- create Container Apps Job(s) via the Makefile in one of the src directories
+- [service_bus_queue](src%2Fservice_bus_queue)
+- [storage_queue](src%2Fstorage_queue)
+- send messages to or process messages in your queue
+- see system & console logs in the workbook
+
+### Permissions Notes:
+
 - Assign UAMI Storage Queue Data Contributor (TODO: Storage Queue Data Message Processor should be
   enough? [Principle of Least Privilege](https://learn.microsoft.com/en-us/entra/identity-platform/secure-least-privileged-access))
 - Assign UAMI Service Bus Data Owner (
@@ -99,13 +151,13 @@ The structure is as follows:
 - ServiceBus Queue has system-provided dead-lettering & uses
   the [AMQP Protocol](https://d0znpp.medium.com/what-is-amqp-protocol-all-you-need-to-know-c9eedb680c71)
 - Storage Queue has application-level dead-lettering
-- The [KEDA scaler](https://keda.sh/docs/2.14/scalers/azure-service-bus/) for the Storage Queue requires the connection string of the Azure Storage Account  
-- The [KEDA scaler](https://keda.sh/docs/2.14/scalers/azure-storage-queue/) for the Service Bus Queue requires the connection string of the Azure Service Bus namespace
+- The [KEDA scaler](https://keda.sh/docs/2.14/scalers/azure-service-bus/) for the Storage Queue requires the connection
+  string of the Azure Storage Account
+- The [KEDA scaler](https://keda.sh/docs/2.14/scalers/azure-storage-queue/) for the Service Bus Queue requires the
+  connection string of the Azure Service Bus namespace
 
-- [ ] Try service bus
-- [ ] Add KEDA rules here (comes with deploying the container job)
-- [ ] Unit tests?
-- [ ] PostgreSQL
+- [ ] Application Insights for Application Logs
+- [ ] Monitoring Notebook (color based on log level)
 
 ## Resources
 
@@ -113,9 +165,23 @@ The structure is as follows:
 - https://learn.microsoft.com/en-us/azure/container-apps/tutorial-event-driven-jobs
 - https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/servicebus/azure-servicebus/samples
 - https://www.nickthecloudguy.com/azure-event-driven-blobs-event-grid/
+- https://techcommunity.microsoft.com/t5/apps-on-azure-blog/deploying-an-event-driven-job-with-azure-container-app-job-and/ba-p/3909279
 
 ### Scalers
 
 - https://keda.sh/docs/2.14/scalers/azure-storage-queue/
 - https://keda.sh/docs/2.14/scalers/azure-service-bus/
-- https://keda.sh/docs/2.14/scalers/postgresql/
+
+### Logging
+
+- System Logs land in Log Analytics Workspace via settings in Container App Environment
+- Console Logs land in Log Analytics Workspace via settings in Container App Environment
+    - I recommend to use Application Insights (OpenTelemetry) for Console Logs
+
+Default tables in Log Analytics Workspace
+
+![img.png](img.png)
+
+### Manged Identities
+
+Currently, connection strings are required for the KEDA scaler (but this will change by the end of June 2024)
