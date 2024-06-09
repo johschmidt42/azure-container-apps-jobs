@@ -3,8 +3,8 @@ from pydantic_settings import BaseSettings
 
 
 class ServiceBusQueueSettings(BaseSettings):
-    service_bus_namespace: str = "service-bus-johannes"
-    queue_name: str = "mysecondqueue"
+    service_bus_namespace: str = "joh-service-bus-namespace"
+    queue_name: str = "messages"
 
     @computed_field
     @property
@@ -13,8 +13,8 @@ class ServiceBusQueueSettings(BaseSettings):
 
 
 class StorageQueueSettings(BaseSettings):
-    storage_account: str = "johannesstorageacc"
-    queue_name: str = "mysecondqueue"
+    storage_account: str = "johstorageacc"
+    queue_name: str = "messages"
 
     @computed_field
     @property

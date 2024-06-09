@@ -1,16 +1,22 @@
 SHELL=/bin/bash
 
 # Variables
-package_name = storage_queue
-container_registry = johannes
-image_name = johannes.azurecr.io/johannes-container-apps-jobs
-image_tag = storage-queue
 subscription = a6feefeb-7f6b-425b-8311-b42ebeaee0d1
 subscription_name = B-ID_Sandbox
 resource_group = johannes-sandbox
-environment = johannes-container-apps-environment
-storage_account_name = johannesstorageacc
-queue_name = mysecondqueue
+location = westeurope
+
+package_name = storage_queue
+container_registry = johcontainerregistry
+image_name = johcontainerregistry.azurecr.io/container-apps-jobs
+image_tag = storage-queue
+
+container_app_job_name = joh-aca-job-storage-queue
+container_apps_environment = joh-container-apps-environment
+storage_account_name = johstorageacc
+queue_name = messages
+user_assigned_managed_identity_name = joh-uami
+
 uami = /subscriptions/a6feefeb-7f6b-425b-8311-b42ebeaee0d1/resourceGroups/johannes-sandbox/providers/Microsoft.ManagedIdentity/userAssignedIdentities/container-jobs
 uami_client_id = 60923ba8-c748-4a0c-9ab2-313d3b3ac414
 
@@ -48,16 +54,18 @@ process-message-queue: ## process a message from the queue
 
 ##@ Deploy
 
-set-subscription:
+set-subscription:  # set the subscription in your AZ CLI
 	@az account set --subscription $(subscription)
 
-deploy-container-job:
+deploy-container-job:  # deploys a container apps job (requires existing image)
 	@QUEUE_CONNECTION_STRING=$$(az storage account show-connection-string -g $(resource_group) --name $(storage_account_name) --query connectionString --output tsv) && \
+	RESOURCE_ID=$$(az identity show --name $(user_assigned_managed_identity_name) --subscription $(subscription) --resource-group $(resource_group) --query id --output tsv) && \
+	CLIENT_ID_UAMI=$$(az identity show --name $(user_assigned_managed_identity_name) --subscription $(subscription) --resource-group $(resource_group) --query clientId --output tsv) && \
 	az containerapp job create \
-    --name "$(image_tag)" \
+    --name "$(container_app_job_name)" \
     --subscription "$(subscription)" \
     --resource-group "$(resource_group)" \
-    --environment "$(environment)" \
+    --environment "$(container_apps_environment)" \
     --trigger-type "Event" \
     --replica-timeout "1800" \
     --min-executions "0" \
@@ -71,9 +79,9 @@ deploy-container-job:
     --cpu "0.5" \
     --memory "1Gi" \
     --secrets "connection-string-secret=$$QUEUE_CONNECTION_STRING" \
-    --env-vars "AZURE_STORAGE_QUEUE_NAME=$(queue_name)" "AZURE_STORAGE_CONNECTION_STRING=secretref:connection-string-secret" "AZURE_CLIENT_ID=$(uami_client_id)" \
-    --mi-user-assigned "$(uami)" \
-    --registry-identity "$(uami)" \
+    --env-vars "AZURE_STORAGE_QUEUE_NAME=$(queue_name)" "AZURE_STORAGE_CONNECTION_STRING=secretref:connection-string-secret" "AZURE_CLIENT_ID=$$CLIENT_ID_UAMI" \
+    --mi-user-assigned "$$RESOURCE_ID" \
+    --registry-identity "$$RESOURCE_ID" \
     --registry-server "$(container_registry).azurecr.io" \
 
 delete-container-job:
