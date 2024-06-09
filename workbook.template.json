@@ -4,9 +4,170 @@
     {
       "type": 1,
       "content": {
-        "json": "# {{ heading }}"
+        "json": "# {{ title }}"
       },
-      "name": "text - 0"
+      "name": "title"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "f5d5a194-e1cd-41cc-bd1e-4f047fb9630f",
+            "version": "KqlParameterItem/1.0",
+            "name": "time_range",
+            "label": "Time Range",
+            "type": 4,
+            "isRequired": true,
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 150000
+                },
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 172800000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2419200000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ],
+              "allowCustom": true
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "value": {
+              "durationMs": 1800000
+            }
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "time-range"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "tabStyle": "bigger",
+        "links": [
+          {
+            "id": "f4ebd703-0176-4a3f-80df-a149e163b572",
+            "cellValue": "setTab",
+            "linkTarget": "parameter",
+            "linkLabel": "System Logs",
+            "subTarget": "systemlogs",
+            "preText": "SystemLogs",
+            "style": "link"
+          },
+          {
+            "id": "98cc837e-843b-44e2-a15d-e3b710bfcbf2",
+            "cellValue": "setTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Console Logs",
+            "subTarget": "consolelogs",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "tabs"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ContainerAppSystemLogs\n| project\n    TimeGenerated,\n    Log,\n    Type,\n    ReplicaName,\n    Reason,\n    EventSource,\n    Count,\n    JobName,\n    _ResourceId\n| order by TimeGenerated desc ",
+        "showQuery": true,
+        "size": 3,
+        "showAnalytics": true,
+        "timeContextFromParameter": "time_range",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "{{ log_analytics_workspace_system_logs }}"
+        ],
+        "gridSettings": {
+          "rowLimit": 100,
+          "filter": true
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "setTab",
+        "comparison": "isEqualTo",
+        "value": "systemlogs"
+      },
+      "name": "system logs query"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ContainerAppConsoleLogs\n| project\n    TimeGenerated,\n    Log,\n    ContainerName,\n    ContainerGroupName,\n    _ResourceId\n| order by TimeGenerated desc",
+        "showQuery": true,
+        "size": 3,
+        "showAnalytics": true,
+        "timeContextFromParameter": "time_range",
+        "showRefreshButton": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "{{ log_analytics_workspace_console_logs }}"
+        ],
+        "gridSettings": {
+          "rowLimit": 100,
+          "filter": true
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "setTab",
+        "comparison": "isEqualTo",
+        "value": "consolelogs"
+      },
+      "name": "console logs query"
     }
   ],
   "fallbackResourceIds": [
