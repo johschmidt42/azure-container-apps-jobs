@@ -68,7 +68,10 @@ setup-diagnostic-settings-system-logs:  ## set up system logs for container apps
 	@RESOURCE_ID=$$(az containerapp env show --subscription $(subscription) --resource-group $(resource_group) --name $(container_apps_environment) --query id --output tsv) && \
 	az monitor diagnostic-settings create --subscription $(subscription) --resource-group $(resource_group) --name system-logs --resource $$RESOURCE_ID --workspace $(workspace_name) --logs '[{"category":"ContainerAppSystemLogs","enabled":true}]'
 
-deploy-workbook:  ## deploy azure monitor workbook to monitor jobs (convert workbook.json to string first)
+create-workbook:  ## create a workbook from the template (workbook.template.json)
+	@python workbook_render.py
+
+deploy-workbook: create-workbook  ## deploy azure monitor workbook to monitor jobs (convert workbook.json to string first)
 	@SERIALIZED_CONTENT=$$(cat $(workbook_file) | jq -c | jq -R) && \
 	az monitor app-insights workbook create --subscription $(subscription) --name $(workbook_id) --resource-group $(resource_group) --display-name $(workbook_name) --serialized-data "$$SERIALIZED_CONTENT" --location $(location) --kind "shared" --source-id "azure monitor"
 
@@ -91,12 +94,15 @@ assign-service-bus-data-owner:
 
 ##@ Stuff
 
-get-id-container-apps-environment:
-	@az containerapp env show --subscription $(subscription) --resource-group $(resource_group) --name $(container_apps_environment) --query id --output tsv
+set-subscription:
+	@az account set --subscription $(subscription)
 
 list-categories:
 	@RESOURCE_ID=$$(az containerapp env show --subscription $(subscription) --resource-group $(resource_group) --name $(container_apps_environment) --query id --output tsv) && \
 	az monitor diagnostic-settings categories list --resource $$RESOURCE_ID
+
+get-id-container-apps-environment:
+	@az containerapp env show --subscription $(subscription) --resource-group $(resource_group) --name $(container_apps_environment) --query id --output tsv
 
 get-id-container-registry:
 	@az acr show --name $(container_registry) --subscription $(subscription) --resource-group $(resource_group) --query id --output tsv
@@ -107,5 +113,5 @@ get-id-uami:
 get-client-id-uami:
 	@az identity show --name $(user_assigned_managed_identity_name) --subscription $(subscription) --resource-group $(resource_group) --query clientId --output tsv
 
-set-subscription:
-	@az account set --subscription $(subscription)
+get-id-log-analytics-workspace:
+	@az monitor log-analytics workspace show --name $(workspace_name) --subscription $(subscription) --resource-group $(resource_group) --query id --output tsv
