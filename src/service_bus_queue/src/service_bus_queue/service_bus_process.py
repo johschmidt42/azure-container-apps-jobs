@@ -10,7 +10,7 @@ from shared.utils import process_message
 
 logger: logging.Logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(stream=sys.stdout))
-logger.level = logging.INFO
+logger.setLevel(logging.INFO)
 
 
 class ServiceBusQueue:

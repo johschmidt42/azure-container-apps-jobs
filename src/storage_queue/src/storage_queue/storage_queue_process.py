@@ -8,8 +8,8 @@ from shared.models import OrderEvent, StorageQueueSettings
 from shared.utils import process_message
 
 logger: logging.Logger = logging.getLogger(__name__)
-logger.addHandler(logging.StreamHandler(stream=sys.stdout))
-logger.level = logging.INFO
+logger.addHandler(logging.StreamHandler(stream=sys.stderr))
+logger.setLevel(logging.INFO)
 
 
 class StorageQueueProcess:

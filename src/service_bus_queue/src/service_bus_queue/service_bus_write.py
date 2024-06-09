@@ -8,7 +8,7 @@ from shared.utils import generate_order_msg
 
 logger: logging.Logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(stream=sys.stdout))
-logger.level = logging.INFO
+logger.setLevel(logging.INFO)
 
 
 def write_to_service_bus_queue(content: str) -> None:
