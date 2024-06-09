@@ -17,9 +17,6 @@ storage_account_name = johstorageacc
 queue_name = messages
 user_assigned_managed_identity_name = joh-uami
 
-uami = /subscriptions/a6feefeb-7f6b-425b-8311-b42ebeaee0d1/resourceGroups/johannes-sandbox/providers/Microsoft.ManagedIdentity/userAssignedIdentities/container-jobs
-uami_client_id = 60923ba8-c748-4a0c-9ab2-313d3b3ac414
-
 #
 # You can use tab for autocomplete on your terminal
 # > make[space][tab]
