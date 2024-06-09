@@ -3,6 +3,7 @@ import sys
 
 from azure.identity import DefaultAzureCredential
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
+
 from shared.models import ServiceBusQueueSettings
 from shared.utils import generate_order_msg
 
