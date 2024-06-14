@@ -79,7 +79,7 @@ deploy-container-job:
     --env-vars "AZURE_SERVICE_BUS_QUEUE_NAME=$(queue_name)" "AZURE_SERVICE_BUS_CONNECTION_STRING=secretref:connection-string-secret" "AZURE_CLIENT_ID=$$CLIENT_ID_UAMI" \
     --mi-user-assigned "$$RESOURCE_ID" \
     --registry-identity "$$RESOURCE_ID" \
-    --registry-server "$(container_registry).azurecr.io" \
+    --registry-server "$(container_registry).azurecr.io"
 
 delete-container-job:
 	@az containerapp job delete --name "$(image_tag)" --subscription "$(subscription)" --resource-group "$(resource_group)" --yes

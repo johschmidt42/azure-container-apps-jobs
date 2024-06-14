@@ -79,7 +79,7 @@ deploy-container-job:  # deploys a container apps job (requires existing image)
     --env-vars "AZURE_STORAGE_QUEUE_NAME=$(queue_name)" "AZURE_STORAGE_CONNECTION_STRING=secretref:connection-string-secret" "AZURE_CLIENT_ID=$$CLIENT_ID_UAMI" \
     --mi-user-assigned "$$RESOURCE_ID" \
     --registry-identity "$$RESOURCE_ID" \
-    --registry-server "$(container_registry).azurecr.io" \
+    --registry-server "$(container_registry).azurecr.io"
 
 delete-container-job:
 	@az containerapp job delete --name "$(image_tag)" --subscription "$(subscription)" --resource-group "$(resource_group)" --yes
