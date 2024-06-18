@@ -68,6 +68,10 @@ setup-diagnostic-settings-system-logs:  ## set up system logs for container apps
 	@RESOURCE_ID=$$(az containerapp env show --subscription $(subscription) --resource-group $(resource_group) --name $(container_apps_environment) --query id --output tsv) && \
 	az monitor diagnostic-settings create --subscription $(subscription) --resource-group $(resource_group) --name system-logs --resource $$RESOURCE_ID --workspace $(workspace_name) --logs '[{"category":"ContainerAppSystemLogs","enabled":true}]'
 
+setup-diagnostic-settings-metrics:  ## set up metrics for container apps environment
+	@RESOURCE_ID=$$(az containerapp env show --subscription $(subscription) --resource-group $(resource_group) --name $(container_apps_environment) --query id --output tsv) && \
+	az monitor diagnostic-settings create --subscription $(subscription) --resource-group $(resource_group) --name metrics --resource $$RESOURCE_ID --workspace $(workspace_name) --metrics '[{"category":"AllMetrics","enabled":true}]'
+
 create-workbook:  ## create a workbook from the template (workbook.template.json)
 	@python workbook_render.py
 
