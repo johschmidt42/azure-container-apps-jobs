@@ -1,6 +1,4 @@
 Jinja2
 azure-mgmt-appcontainers
-black
-flake8
-isort
+ruff
 typer
