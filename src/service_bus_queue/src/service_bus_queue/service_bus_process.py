@@ -1,7 +1,6 @@
 import json
 import logging
 import sys
-from typing import List
 
 from azure.identity import DefaultAzureCredential
 from azure.servicebus import ServiceBusClient, ServiceBusReceivedMessage
@@ -39,7 +38,7 @@ class ServiceBusQueue:
                 # This part should always work. Otherwise, Azure Container Apps will
                 # endlessly process the same (visible) message,
                 # because the message will not be read/processed.
-                messages: List[ServiceBusReceivedMessage] = receiver.receive_messages(
+                messages: list[ServiceBusReceivedMessage] = receiver.receive_messages(
                     max_message_count=1, max_wait_time=5
                 )
 

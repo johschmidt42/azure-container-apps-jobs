@@ -18,6 +18,7 @@ select = [
   "E", # pycodestyle
   "D", # pydocstyle
   "I", # isort
+  "UP", # pyupgrade
 ]
 ignore = ["D100", "D104", "E501"]  # ignore docstrings in modules & packages and Line too long
 
