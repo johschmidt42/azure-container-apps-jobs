@@ -14,6 +14,7 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.ruff.lint]
 select = [
+  "F", # Pyflakes
   "E", # pycodestyle
   "D", # pydocstyle
   "I", # isort
