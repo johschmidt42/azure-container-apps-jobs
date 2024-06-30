@@ -15,20 +15,21 @@ logger.setLevel(logging.INFO)
 
 
 class ServiceBusQueue:
+    """Service Bus queue class."""
+
     def __init__(self):
+        """Initialize the service bus queue class."""
         self.settings: ServiceBusQueueSettings = ServiceBusQueueSettings()
         self.credential: DefaultAzureCredential = DefaultAzureCredential()
 
     def run(self) -> None:
-        """
-        Process service bus queue messages.
+        """Process service bus queue messages.
 
         Uses system-provided dead-lettering.
 
         Returns: None
 
         """
-
         with ServiceBusClient(
             fully_qualified_namespace=self.settings.service_bus_url,
             credential=self.credential,

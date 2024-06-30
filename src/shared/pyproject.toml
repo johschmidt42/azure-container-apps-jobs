@@ -12,5 +12,11 @@ dynamic = ["dependencies"]
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+select = [
+  "D",   # pydocstyle
+]
+ignore = ["D100", "D104"]  # ignore docstrings in modules & packages
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

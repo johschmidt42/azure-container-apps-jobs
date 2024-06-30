@@ -7,8 +7,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 def generate_order_msg() -> str:
-    """
-    Generate an order message.
+    """Generate an order message.
 
     Returns:
         str: The JSON representation of the order event.
@@ -20,8 +19,7 @@ def generate_order_msg() -> str:
 
 
 def process_message(order_event: OrderEvent) -> None:
-    """
-    Processes a given order event message.
+    """Processes a given order event message.
 
     Args:
         order_event: An instance of the OrderEvent class representing the order event message to be processed.
@@ -42,4 +40,12 @@ def process_message(order_event: OrderEvent) -> None:
 
 
 def process_message_fail(order_event: OrderEvent) -> None:
+    """Processes a given order event message.
+
+    Args:
+        order_event: An instance of the OrderEvent class.
+
+    Returns: None
+
+    """
     raise ValueError("Can't process message!")

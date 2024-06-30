@@ -13,7 +13,7 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.ruff.lint]
-extend-select = [
+select = [
   "D",   # pydocstyle
 ]
 ignore = ["D100", "D104"]  # ignore docstrings in modules & packages

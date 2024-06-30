@@ -29,7 +29,7 @@ help:  ## display this help
 
 format:  ## format code using ruff
 	@ruff format .
-	@ruff check --fix-only
+	@ruff check --fix-only .
 
 lint:  ## run linter using ruff
 	ruff check .
