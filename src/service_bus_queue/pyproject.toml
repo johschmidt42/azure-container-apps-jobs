@@ -14,10 +14,11 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.ruff.lint]
 select = [
+    "E", # pycodestyle
   "D", # pydocstyle
   "I", # isort
 ]
-ignore = ["D100", "D104"]  # ignore docstrings in modules & packages
+ignore = ["D100", "D104", "E501"]  # ignore docstrings in modules & packages and Line too long
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
