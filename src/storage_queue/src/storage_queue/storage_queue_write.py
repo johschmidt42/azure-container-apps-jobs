@@ -13,7 +13,8 @@ logger.setLevel(logging.INFO)
 
 
 def write_to_storage_queue(content: str) -> None:
-    """
+    """Write a message to storage queue.
+
     Args:
         content (str): The content to be written to the queue.
 
@@ -33,8 +34,7 @@ def write_to_storage_queue(content: str) -> None:
 
 
 def run() -> None:
-    """
-    Writes the content generated from the `generate_order_msg()` method to a queue using the `write_to_queue()` method, and logs any exceptions that occur.
+    """Writes the content generated from the `generate_order_msg()` method to a queue using the `write_to_queue()` method, and logs any exceptions that occur.
 
     Returns:
         None

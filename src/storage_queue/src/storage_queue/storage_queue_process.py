@@ -14,7 +14,10 @@ logger.setLevel(logging.INFO)
 
 
 class StorageQueueProcess:
+    """Storage Queue Process class."""
+
     def __init__(self):
+        """Initialise the class."""
         self.settings: StorageQueueSettings = StorageQueueSettings()
         self.credential: DefaultAzureCredential = DefaultAzureCredential()
 
@@ -27,15 +30,13 @@ class StorageQueueProcess:
         )
 
     def run(self) -> None:
-        """
-        Process storage queue messages.
+        """Process storage queue messages.
 
         Uses application-level dead-lettering.
 
         Returns: None
 
         """
-
         # This part should always work. Otherwise, Azure Container Apps will
         # endlessly process the same (visible) message,
         # because the message will not be read/processed.
@@ -71,8 +72,7 @@ class StorageQueueProcess:
             raise ex
 
     def add_to_poison_queue(self, msg: QueueMessage) -> None:
-        """
-        Adds a message to the poison queue.
+        """Adds a message to the poison queue.
 
         This is application-level dead-lettering.
 
@@ -93,9 +93,7 @@ class StorageQueueProcess:
         return None
 
     def receive_message(self) -> None | QueueMessage:
-        """
-
-        Receive a message from the queue.
+        """Receive a message from the queue.
 
         Returns:
             None: If no message is received from the queue.
@@ -103,7 +101,6 @@ class StorageQueueProcess:
 
         Raises:
             Exception: If there is an error receiving the message.
-
         """
         try:
             msg: None | QueueMessage = self.queue_client.receive_message(
@@ -117,8 +114,7 @@ class StorageQueueProcess:
             raise ex
 
     def delete_message(self, msg: QueueMessage) -> None:
-        """
-        Delete a message from the queue.
+        """Delete a message from the queue.
 
         Args:
             self (object): The instance of the class that this method belongs to.
