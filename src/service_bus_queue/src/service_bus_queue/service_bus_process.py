@@ -5,7 +5,6 @@ from typing import List
 
 from azure.identity import DefaultAzureCredential
 from azure.servicebus import ServiceBusClient, ServiceBusReceivedMessage
-
 from shared.models import OrderEvent, ServiceBusQueueSettings
 from shared.utils import process_message
 

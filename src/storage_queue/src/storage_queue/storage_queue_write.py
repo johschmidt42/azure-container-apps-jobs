@@ -3,7 +3,6 @@ import sys
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.queue import QueueClient, QueueMessage
-
 from shared.models import StorageQueueSettings
 from shared.utils import generate_order_msg
 

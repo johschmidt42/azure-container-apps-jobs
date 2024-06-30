@@ -14,7 +14,8 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.ruff.lint]
 select = [
-  "D",   # pydocstyle
+  "D", # pydocstyle
+  "I", # isort
 ]
 ignore = ["D100", "D104"]  # ignore docstrings in modules & packages
 

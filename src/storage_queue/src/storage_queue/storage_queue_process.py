@@ -4,7 +4,6 @@ import sys
 
 from azure.identity import DefaultAzureCredential
 from azure.storage.queue import QueueClient, QueueMessage
-
 from shared.models import OrderEvent, StorageQueueSettings
 from shared.utils import process_message
 
