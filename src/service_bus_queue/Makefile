@@ -32,7 +32,7 @@ format:  ## format code using ruff
 	@ruff check --fix-only .
 
 lint:  ## run linter using ruff
-	ruff check .
+	@ruff check .
 
 build-release:  ## build docker image (release)
 	@cd ../; docker build --file ./$(package_name)/Dockerfile --target release --platform linux/amd64 --tag $(image_name):$(image_tag) .

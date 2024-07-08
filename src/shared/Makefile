@@ -15,4 +15,4 @@ format:  ## format code using ruff
 	@ruff check --fix-only .
 
 lint:  ## run linter using ruff
-	ruff check .
+	@ruff check .
