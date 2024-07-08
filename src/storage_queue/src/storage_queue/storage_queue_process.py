@@ -44,7 +44,7 @@ class StorageQueueProcess:
         # exit early if no messages are present
         if msg is None:
             logger.info("No messages received")
-            return None
+            return
 
         msg_id: str = msg["id"]
         dequeue_count: int = msg["dequeue_count"]
@@ -58,13 +58,12 @@ class StorageQueueProcess:
             if dequeue_count > self.max_retries:
                 self.add_to_poison_queue(msg=msg)
                 self.delete_message(msg=msg)
-                return None
+                return
 
-            # self.process_message_fail(order_event=order_event)
             process_message(order_event=order_event)
             self.delete_message(msg)
 
-            return None
+            return
 
         except Exception as ex:
             logger.exception(ex)
@@ -89,8 +88,6 @@ class StorageQueueProcess:
         )
         poison_queue_client.send_message(content=msg, time_to_live=-1)
 
-        return None
-
     def receive_message(self) -> None | QueueMessage:
         """Receive a message from the queue.
 
@@ -103,7 +100,7 @@ class StorageQueueProcess:
         """
         try:
             msg: None | QueueMessage = self.queue_client.receive_message(
-                visibility_timeout=self.visibility_timeout
+                visibility_timeout=self.visibility_timeout,
             )
             return msg
 
@@ -127,7 +124,7 @@ class StorageQueueProcess:
         """
         try:
             self.queue_client.delete_message(msg)
-            return None
+            return
 
         except Exception as ex:
             logger.exception(ex)

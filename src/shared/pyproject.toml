@@ -10,15 +10,20 @@ requires-python = ">=3.10"
 dynamic = ["dependencies"]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+dependencies = { file = ["requirements.txt"] }
 
 [tool.ruff.lint]
 select = [
-  "F", # Pyflakes
-  "E", # pycodestyle
-  "D", # pydocstyle
-  "I", # isort
-  "UP", # pyupgrade
+    "F", # Pyflakes
+    "E", # pycodestyle
+    "C90", # mccabe
+    "I", # isort
+    "D", # pydocstyle
+    "UP", # pyupgrade
+    "N", # pep8-naming
+    "ERA", # eradicate
+    "PL", # Pylint
+    "B", # flake8-bugbear
 ]
 ignore = ["D100", "D104", "E501"]  # ignore docstrings in modules & packages and Line too long
 
