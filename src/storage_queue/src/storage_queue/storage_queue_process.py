@@ -36,7 +36,7 @@ class StorageQueueProcess:
         Returns: None
 
         """
-        # This part should always work. Otherwise, Azure Container Apps will
+        # This part should always work. Otherwise, Azure Container Apps Jobs will
         # endlessly process the same (visible) message,
         # because the message will not be read/processed.
         msg: None | QueueMessage = self.receive_message()

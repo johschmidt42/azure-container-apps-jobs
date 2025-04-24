@@ -35,7 +35,7 @@ class ServiceBusQueue:
             with servicebus_client.get_queue_receiver(
                 queue_name=self.settings.queue_name
             ) as receiver:
-                # This part should always work. Otherwise, Azure Container Apps will
+                # This part should always work. Otherwise, Azure Container Apps Jobs will
                 # endlessly process the same (visible) message,
                 # because the message will not be read/processed.
                 messages: list[ServiceBusReceivedMessage] = receiver.receive_messages(
