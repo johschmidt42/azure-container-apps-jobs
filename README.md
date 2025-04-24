@@ -30,7 +30,7 @@ Source code for the docker images can be found in the [src directory](src).
 Infrastructure is provisioned via Azure CLI commands in the [Makefile](Makefile).
 
 - Execute a job & get the job execution status using REST API/Python
-  SDK ([container_app_start_job.py](container_app_start_job.py))
+  SDK ([container_app_start_job.py](scripts/container_app_start_job.py))
 - Create a Workbook to view system & console logs.
 
 ### Directory Structure
@@ -40,13 +40,15 @@ The structure is as follows:
 ```shell
 .
 ├── docs
+├── packages
+│   └── shared
+│           └── src
+│               └── shared
 └── src
     ├── service_bus_queue
     │          └── src
     │               └── service_bus_queue
-    ├── shared
-    │        └── src
-    │            └── shared
+    │
     └── storage_queue
         └── src
             └── storage_queue
@@ -180,7 +182,7 @@ After the resources have been created you can:
 
 Default tables in Log Analytics Workspace
 
-![img.png](img.png)
+![img.png](docs/img.png)
 
 ### Manged Identities
 

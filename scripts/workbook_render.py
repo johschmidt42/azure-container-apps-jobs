@@ -14,7 +14,7 @@ template_file_name: str = "workbook.template.json"
 output_file_name: str = "workbook.json"
 
 # Set up the Jinja2 environment
-loader: FileSystemLoader = FileSystemLoader(".")
+loader: FileSystemLoader = FileSystemLoader("..")
 env: Environment = Environment(loader=loader, undefined=StrictUndefined)
 template: Template = env.get_template(template_file_name)
 

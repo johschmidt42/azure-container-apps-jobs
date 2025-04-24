@@ -1,8 +1,0 @@
-# Ignore everything by default
-*
-
-# Allow specific files and directories
-!/src
-!/pyproject.toml
-!/requirements.txt
-!/setup.py

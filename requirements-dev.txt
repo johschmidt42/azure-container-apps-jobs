@@ -1,4 +1,0 @@
-Jinja2
-azure-mgmt-appcontainers
-ruff
-typer

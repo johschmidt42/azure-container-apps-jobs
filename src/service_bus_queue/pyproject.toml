@@ -1,31 +1,25 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "service_bus_queue"
 version = "1.0.0"
 description = "Code to process messages in an Azure Service Bus Queue."
 requires-python = ">=3.10"
-dynamic = ["dependencies"]
-
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
-
-[tool.ruff.lint]
-select = [
-    "F", # Pyflakes
-    "E", # pycodestyle
-    "C90", # mccabe
-    "I", # isort
-    "D", # pydocstyle
-    "UP", # pyupgrade
-    "N", # pep8-naming
-    "ERA", # eradicate
-    "PL", # Pylint
-    "B", # flake8-bugbear
+dependencies = [
+    "azure-servicebus>=7.14.2",
+    "shared",
 ]
-ignore = ["D100", "D104", "E501"]  # ignore docstrings in modules & packages and Line too long
 
-[tool.ruff.lint.pydocstyle]
-convention = "google"
+[tool.uv.workspace]
+members = [
+    "../../packages/*"
+]
+
+[tool.uv.sources]
+shared = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "azure-mgmt-appcontainers>=3.2.0",
+    "jinja2>=3.1.6",
+    "ruff>=0.11.6",
+    "typer>=0.15.2",
+]
